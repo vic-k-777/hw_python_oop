@@ -23,6 +23,7 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
+
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     MIN_IN_H: int = 60
@@ -38,20 +39,24 @@ class Training:
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
+
         self.distance = self.action * self.LEN_STEP / self.M_IN_KM
         return self.distance
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
+
         self.speed = self.get_distance() / self.duration
         return self.speed
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
+
         pass
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
+
         return InfoMessage(self.__class__.__name__,
                            self.duration,
                            self.get_distance(),
@@ -61,6 +66,7 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
+
     CALORIES_MEAN_SPEED_MULTIPLIER = CMSM = 18
     CALORIES_MEAN_SPEED_SHIFT = CMSS = 1.79
     LEN_STEP: float = 0.65
@@ -77,6 +83,7 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
+
     CALORIES_WEIGHT_MULTIPLIER = CWM = 0.035
     CALORIES_SPEED_HEIGHT_MULTIPLIER = CSHM = 0.029
     CM_IN_M = 100
@@ -102,6 +109,7 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
+
     CALORIES_WEIGHT_MULTIPLIER: float = 2
     CALORIES_MEAN_SPEED: float = 1.1
     LEN_STEP: float = 1.38
@@ -133,17 +141,18 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_type: Dict[str, Type:[Training]] = {'SWM': Swimming,
-                                                 'RUN': Running,
-                                                 'WLK': SportsWalking}
+
+    training_type: Dict[str, Type[Training]] = {'SWM': Swimming,
+                                                'RUN': Running,
+                                                'WLK': SportsWalking}
     if workout_type not in training_type:
         raise KeyError('Указанный вид тренировки отсутствует.')
-    training: Training = training_type[workout_type](*data)
-    return training
+    return training_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
+
     info = training.show_training_info()
     print(info.get_message())
 
